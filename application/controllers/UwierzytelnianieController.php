@@ -38,7 +38,7 @@ class UwierzytelnianieController extends Zend_Controller_Action {
                       $authStorage->write($identity);
                       $this->_redirect('index/index');
                 } else {
-                    echo 'is not valid';
+                    echo 'złe dane podałes';
                }
             }
         }
