@@ -13,7 +13,7 @@ class UwierzytelnianieController extends Zend_Controller_Action {
     public function logujAction() {
 
         if (Zend_Auth::getInstance()->hasIdentity()) {
-            $this->_redirect(index/index);
+            $this->_redirect('index/index');
         }
         
         $request = $this->getRequest();
@@ -23,8 +23,9 @@ class UwierzytelnianieController extends Zend_Controller_Action {
         if ($request->isPost()) {
             if($form->isValid($this->_request->getPost())){
                 $authAdapter = $this->getAuthAdapter();
-                $username = $form->getValue($username);
-                $password = $form->getValue($password);
+                
+                $username = $form->getValue('username');
+                $password = $form->getValue('password');
                 
                 $authAdapter->setIdentity($username)
                         ->setCredential($password);
@@ -32,13 +33,13 @@ class UwierzytelnianieController extends Zend_Controller_Action {
                 
                 $result = $auth->authenticate($authAdapter);
                 if ($result->isValid()) {
-                    $identity = $authAdapter->getResultRowObject();
-                    $authStorage = $auth->getStorage();
-                    $authStorage->write($identity);
-                    $this->_redirect(index/index);
+                      $identity = $authAdapter->getResultRowObject();
+                      $authStorage = $auth->getStorage();
+                      $authStorage->write($identity);
+                      $this->_redirect('index/index');
                 } else {
                     echo 'is not valid';
-                }
+               }
             }
         }
 
@@ -52,10 +53,11 @@ class UwierzytelnianieController extends Zend_Controller_Action {
     }
 
     private function getAuthAdapter() {
-        $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
-        $authAdapter->setTableName('uzytkownicy');
-        $authAdapter->setIdentityColumn('username');
-        $authAdapter->setCredentialColumn('password');
+        $dbAdapter = Zend_Db_Table::getDefaultAdapter();
+        $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
+        $authAdapter->setTableName('uzytkownicy')
+                    ->setIdentityColumn('username')
+                    ->setCredentialColumn('password');
 
         return $authAdapter;
     }

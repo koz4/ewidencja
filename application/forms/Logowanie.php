@@ -2,6 +2,7 @@
 
 class Application_Form_Logowanie extends Zend_Form
 {
+    
     public function __construct($options = null) {
         parent::__construct($options);
     
@@ -17,7 +18,7 @@ class Application_Form_Logowanie extends Zend_Form
         $loguj = new Zend_Form_Element_Submit('loguj');
         $loguj->setLabel('Zaloguj');
         
-        $this->addElements(array($username ,$password ,$loguj));
+        $this->addElements(array($username , $password , $loguj));
         $this->setMethod('post');
         $this->setAction(Zend_Controller_Front::getInstance()->getBaseUrl().'/uwierzytelnianie/loguj');
         
